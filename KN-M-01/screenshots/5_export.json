@@ -1,0 +1,8 @@
+[{
+  "_id": {
+    "$oid": "6a0c600faf28379f1e7d872a"
+  },
+  "Adresse": "Madahadevastrasse 67",
+  "Groesse": 167,
+  "Geburtsdatum": "2008-06-07"
+}]
