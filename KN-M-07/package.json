@@ -1,0 +1,10 @@
+{
+  "name": "kn-m-07-programming",
+  "version": "1.0.0",
+  "description": "MongoDB client application demonstrating programmatic queries for SternFitness",
+  "main": "app.js",
+  "type": "commonjs",
+  "dependencies": {
+    "mongodb": "^6.5.0"
+  }
+}
