@@ -1,0 +1,20 @@
+{
+  "name": "Hans Mueller",
+  "geschlecht": "M",
+  "email": "hans.mueller@example.com",
+  "telefon": "+41 79 123 45 67",
+  "geburtsdatum": "1990-05-12T00:00:00Z",
+  "eintrittsdatum": "2025-02-01T00:00:00Z",
+  "adresse": {
+    "strasse": "Hauptstrasse 15",
+    "plz": 8001,
+    "ort": "Zuerich"
+  },
+  "kurs_anmeldungen": [
+    {
+      "kurs_id": "665c829ef2e185c7c2579b07",
+      "anmeldedatum": "2025-02-02T10:00:00Z",
+      "status": "aktiv"
+    }
+  ]
+}

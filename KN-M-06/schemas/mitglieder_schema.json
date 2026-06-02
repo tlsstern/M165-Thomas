@@ -1,0 +1,74 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": ["name", "geschlecht", "email", "geburtsdatum", "eintrittsdatum", "adresse"],
+    "properties": {
+      "name": {
+        "bsonType": "string",
+        "description": "Full name - must be a string and is required"
+      },
+      "geschlecht": {
+        "bsonType": "string",
+        "enum": ["M", "W", "D"],
+        "description": "Gender code - must be M, W, or D and is required"
+      },
+      "email": {
+        "bsonType": "string",
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+        "description": "Email address - must be a valid email string pattern and is required"
+      },
+      "telefon": {
+        "bsonType": "string",
+        "description": "Phone number - must be a string"
+      },
+      "geburtsdatum": {
+        "bsonType": "date",
+        "description": "Date of birth - must be a date and is required"
+      },
+      "eintrittsdatum": {
+        "bsonType": "date",
+        "description": "Joining date - must be a date and is required"
+      },
+      "adresse": {
+        "bsonType": "object",
+        "required": ["strasse", "plz", "ort"],
+        "properties": {
+          "strasse": {
+            "bsonType": "string",
+            "description": "Street name - must be a string and is required"
+          },
+          "plz": {
+            "bsonType": "int",
+            "description": "Postal code - must be an integer and is required"
+          },
+          "ort": {
+            "bsonType": "string",
+            "description": "City - must be a string and is required"
+          }
+        }
+      },
+      "kurs_anmeldungen": {
+        "bsonType": "array",
+        "items": {
+          "bsonType": "object",
+          "required": ["kurs_id", "anmeldedatum", "status"],
+          "properties": {
+            "kurs_id": {
+              "bsonType": "objectId",
+              "description": "FK referencing the course - must be an objectId and is required"
+            },
+            "anmeldedatum": {
+              "bsonType": "date",
+              "description": "Registration date - must be a date and is required"
+            },
+            "status": {
+              "bsonType": "string",
+              "enum": ["aktiv", "storniert", "warteliste"],
+              "description": "Status - must be aktiv, storniert, or warteliste and is required"
+            }
+          }
+        }
+      }
+    }
+  }
+}

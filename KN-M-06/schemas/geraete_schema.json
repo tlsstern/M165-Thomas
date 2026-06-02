@@ -1,0 +1,26 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": ["bezeichnung", "typ", "anschaffungsdatum", "wartungsintervall"],
+    "properties": {
+      "bezeichnung": {
+        "bsonType": "string",
+        "description": "Device name - must be a string and is required"
+      },
+      "typ": {
+        "bsonType": "string",
+        "enum": ["Kardio", "Kraft", "Freihantel", "Zubehoer"],
+        "description": "Device type - must be one of the enum values and is required"
+      },
+      "anschaffungsdatum": {
+        "bsonType": "date",
+        "description": "Purchase date - must be a date and is required"
+      },
+      "wartungsintervall": {
+        "bsonType": "int",
+        "minimum": 1,
+        "description": "Maintenance interval in days - must be an integer and is required"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": ["name", "spezialisierung", "gehalt", "anstellungsdatum"],
+    "properties": {
+      "name": {
+        "bsonType": "string",
+        "description": "Name of the trainer - must be a string and is required"
+      },
+      "spezialisierung": {
+        "bsonType": "string",
+        "description": "Trainer specialization area - must be a string and is required"
+      },
+      "gehalt": {
+        "bsonType": "double",
+        "minimum": 0,
+        "description": "Trainer monthly gehalt - must be a double and is required"
+      },
+      "anstellungsdatum": {
+        "bsonType": "date",
+        "description": "Hiring date - must be a date and is required"
+      }
+    }
+  }
+}
