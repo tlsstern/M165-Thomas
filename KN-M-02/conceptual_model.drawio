@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="Electron" modified="2026-06-02T12:00:00.000Z" agent="5.0" version="20.0.0" type="device">
+  <diagram id="ConceptualModel" name="SternFitness Conceptual Model">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Entity: Mitglied -->
+        <mxCell id="ent_mitglied" value="Mitglied" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Entity: Trainer -->
+        <mxCell id="ent_trainer" value="Trainer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Entity: Kurs -->
+        <mxCell id="ent_kurs" value="Kurs" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="280" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Entity: Gerät -->
+        <mxCell id="ent_geraet" value="Gerät" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Relationship: besucht (Mitglied - Kurs) -->
+        <mxCell id="rel_besucht" value="besucht" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b555;" vertex="1" parent="1">
+          <mxGeometry x="200" y="160" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Relationship: leitet (Trainer - Kurs) -->
+        <mxCell id="rel_leitet" value="leitet" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b555;" vertex="1" parent="1">
+          <mxGeometry x="500" y="160" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Relationship: nutzt (Kurs - Gerät) -->
+        <mxCell id="rel_nutzt" value="nutzt" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b555;" vertex="1" parent="1">
+          <mxGeometry x="350" y="380" width="100" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Edge: Mitglied -> besucht -->
+        <mxCell id="edge_m_b" value="N" style="endArrow=none;html=1;exitX=1;exitY=1;entryX=0;entryY=0;" edge="1" parent="1" source="ent_mitglied" target="rel_besucht">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Edge: besucht -> Kurs -->
+        <mxCell id="edge_b_k" value="M" style="endArrow=none;html=1;exitX=1;exitY=1;entryX=0;entryY=0;" edge="1" parent="1" source="rel_besucht" target="ent_kurs">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Edge: Trainer -> leitet -->
+        <mxCell id="edge_t_l" value="1" style="endArrow=none;html=1;exitX=0;exitY=1;entryX=1;entryY=0;" edge="1" parent="1" source="ent_trainer" target="rel_leitet">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Edge: leitet -> Kurs -->
+        <mxCell id="edge_l_k" value="N" style="endArrow=none;html=1;exitX=0;exitY=1;entryX=1;entryY=0;" edge="1" parent="1" source="rel_leitet" target="ent_kurs">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Edge: Kurs -> nutzt -->
+        <mxCell id="edge_k_n" value="N" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="ent_kurs" target="rel_nutzt">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Edge: nutzt -> Gerät -->
+        <mxCell id="edge_n_g" value="M" style="endArrow=none;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="rel_nutzt" target="ent_geraet">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
