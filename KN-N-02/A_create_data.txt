@@ -1,0 +1,44 @@
+// KN-N-02 Teil A: Daten hinzufügen (SternFitness)
+// Ein einziges grosses CREATE-Statement legt alle Knoten und Kanten an.
+// Ausführung: Inhalt in den Neo4j Browser kopieren und ausführen.
+// Tipp: Vorher mit  MATCH (n) DETACH DELETE n;  aufräumen, damit keine Duplikate entstehen.
+
+CREATE
+  // --- Trainer (3) ---
+  (t1:Trainer {trainerId: 1, name: 'Thomas Stern',  spezialisierung: 'CrossFit, Personal Training', gehalt: 6200.00, anstellungsdatum: date('2024-01-15')}),
+  (t2:Trainer {trainerId: 2, name: 'Sarah Meier',   spezialisierung: 'Yoga, Pilates',               gehalt: 5800.00, anstellungsdatum: date('2024-03-01')}),
+  (t3:Trainer {trainerId: 3, name: 'Markus Kraft',  spezialisierung: 'Kraftsport, Bodybuilding',    gehalt: 6000.00, anstellungsdatum: date('2023-11-10')}),
+
+  // --- Kurse (3) ---
+  (k1:Kurs {kursId: 1, titel: 'CrossFit Basics',     raum: 'Sektor A',       dauer: 60, maxTeilnehmer: 15}),
+  (k2:Kurs {kursId: 2, titel: 'Yoga fuer Anfaenger', raum: 'Sektor B',       dauer: 45, maxTeilnehmer: 20}),
+  (k3:Kurs {kursId: 3, titel: 'Spinning Power',      raum: 'Kardio-Raum 1',  dauer: 50, maxTeilnehmer: 12}),
+
+  // --- Mitglieder (4) ---
+  (m1:Mitglied {mitgliedId: 1, name: 'Hans Mueller', geschlecht: 'M', email: 'hans.mueller@example.com', geburtsdatum: date('1990-05-12'), eintrittsdatum: date('2025-02-01'), ort: 'Zuerich'}),
+  (m2:Mitglied {mitgliedId: 2, name: 'Anna Schmid',  geschlecht: 'W', email: 'anna.schmid@example.com',  geburtsdatum: date('1995-10-22'), eintrittsdatum: date('2025-03-01'), ort: 'Winterthur'}),
+  (m3:Mitglied {mitgliedId: 3, name: 'Sam Jones',    geschlecht: 'D', email: 'sam.jones@example.com',    geburtsdatum: date('1988-08-08'), eintrittsdatum: date('2025-01-10'), ort: 'Duebendorf'}),
+  (m4:Mitglied {mitgliedId: 4, name: 'Felix Meier',  geschlecht: 'M', email: 'felix.meier@example.com',  geburtsdatum: date('2002-04-18'), eintrittsdatum: date('2025-04-01'), ort: 'Zuerich'}),
+
+  // --- Geraete (4) ---
+  (g1:Geraet {geraetId: 1, bezeichnung: 'Laufband ProX',    typ: 'Kardio', anschaffungsdatum: date('2025-01-10'), wartungsintervall: 90}),
+  (g2:Geraet {geraetId: 2, bezeichnung: 'Hantelbank Pro',   typ: 'Kraft',  anschaffungsdatum: date('2024-06-15'), wartungsintervall: 180}),
+  (g3:Geraet {geraetId: 3, bezeichnung: 'Spinning Bike V2', typ: 'Kardio', anschaffungsdatum: date('2025-02-20'), wartungsintervall: 60}),
+  (g4:Geraet {geraetId: 4, bezeichnung: 'Rudergeraet Air',  typ: 'Kardio', anschaffungsdatum: date('2024-09-05'), wartungsintervall: 120}),
+
+  // --- Kanten: Trainer LEITET Kurs ---
+  (t1)-[:LEITET]->(k1),
+  (t2)-[:LEITET]->(k2),
+  (t1)-[:LEITET]->(k3),
+
+  // --- Kanten: Mitglied BESUCHT Kurs (mit Attributen) ---
+  (m1)-[:BESUCHT {anmeldedatum: date('2025-02-02'), status: 'aktiv'}]->(k1),
+  (m1)-[:BESUCHT {anmeldedatum: date('2025-02-05'), status: 'warteliste'}]->(k3),
+  (m2)-[:BESUCHT {anmeldedatum: date('2025-03-02'), status: 'aktiv'}]->(k2),
+  (m4)-[:BESUCHT {anmeldedatum: date('2025-04-02'), status: 'aktiv'}]->(k1),
+
+  // --- Kanten: Kurs NUTZT Geraet (mit Attribut anzahl) ---
+  (k3)-[:NUTZT {anzahl: 10}]->(g3),
+  (k1)-[:NUTZT {anzahl: 4}]->(g2),
+  (k1)-[:NUTZT {anzahl: 2}]->(g4),
+  (k3)-[:NUTZT {anzahl: 1}]->(g1);

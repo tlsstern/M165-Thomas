@@ -1,0 +1,50 @@
+// KN-N-02 Teil B: Daten abfragen (SternFitness)
+// Jeweils ein Statement pro Szenario, einzeln im Neo4j Browser ausführen.
+
+// ---------------------------------------------------------------
+// "Alle Knoten und Kanten lesen" (inkl. OPTIONAL MATCH)
+// ---------------------------------------------------------------
+MATCH (n)
+OPTIONAL MATCH (n)-[r]->(m)
+RETURN n, r, m;
+
+// ---------------------------------------------------------------
+// Szenario 1: Welche Mitglieder sind in Kursen von "Thomas Stern"
+//             AKTIV angemeldet? (2-Hop Traversierung, 2x WHERE-Logik)
+// ---------------------------------------------------------------
+MATCH (mit:Mitglied)-[b:BESUCHT]->(k:Kurs)<-[:LEITET]-(t:Trainer)
+WHERE t.name = 'Thomas Stern' AND b.status = 'aktiv'
+RETURN mit.name AS Mitglied, k.titel AS Kurs, b.anmeldedatum AS Angemeldet;
+
+// ---------------------------------------------------------------
+// Szenario 2: Kurs-Empfehlung fuer "Hans Mueller" (Collaborative Filtering)
+//             Kurse, die Mitglieder mit gemeinsamem Kurs besuchen,
+//             Hans selbst aber noch NICHT besucht.
+// ---------------------------------------------------------------
+MATCH (hans:Mitglied {name: 'Hans Mueller'})-[:BESUCHT]->(:Kurs)
+      <-[:BESUCHT]-(other:Mitglied)-[:BESUCHT]->(empfehlung:Kurs)
+WHERE other <> hans AND NOT (hans)-[:BESUCHT]->(empfehlung)
+RETURN DISTINCT empfehlung.titel AS Empfehlung;
+
+// ---------------------------------------------------------------
+// Szenario 3: Geraete-Bedarf je Geraet ueber alle Kurse hinweg
+//             (Aggregation ueber das Kanten-Attribut anzahl)
+// ---------------------------------------------------------------
+MATCH (k:Kurs)-[u:NUTZT]->(g:Geraet)
+RETURN g.bezeichnung AS Geraet,
+       sum(u.anzahl)  AS GesamtBedarf,
+       collect(k.titel) AS GenutztInKursen
+ORDER BY GesamtBedarf DESC;
+
+// ---------------------------------------------------------------
+// Szenario 4: Auslastung je Kurs – aktive Anmeldungen und freie Plaetze
+//             (OPTIONAL MATCH + WHERE, damit auch leere Kurse erscheinen)
+// ---------------------------------------------------------------
+MATCH (k:Kurs)
+OPTIONAL MATCH (mit:Mitglied)-[b:BESUCHT]->(k)
+WHERE b.status = 'aktiv'
+WITH k, count(mit) AS aktiveAnmeldungen
+RETURN k.titel AS Kurs,
+       aktiveAnmeldungen,
+       k.maxTeilnehmer - aktiveAnmeldungen AS FreiePlaetze
+ORDER BY FreiePlaetze ASC;

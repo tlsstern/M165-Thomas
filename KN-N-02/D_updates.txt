@@ -1,0 +1,30 @@
+// KN-N-02 Teil D: Daten verändern (SternFitness)
+// 3 Szenarien – jeweils einzeln im Neo4j Browser ausführen.
+// Voraussetzung: A_create_data.txt wurde (erneut) ausgeführt.
+
+// ---------------------------------------------------------------
+// Szenario 1 (Knoten-Attribut): Gehaltserhöhung von 5% für "Markus Kraft"
+// SET berechnet den neuen Wert direkt aus dem alten.
+// ---------------------------------------------------------------
+MATCH (t:Trainer {name: 'Markus Kraft'})
+SET t.gehalt = round(t.gehalt * 1.05, 2)
+RETURN t.name AS Trainer, t.gehalt AS NeuesGehalt;
+
+// ---------------------------------------------------------------
+// Szenario 2 (Kanten-Attribut): "Hans Mueller" rückt im Kurs
+// "Spinning Power" von der Warteliste auf 'aktiv' nach.
+// Es wird das Attribut auf der Kante [:BESUCHT] geändert.
+// ---------------------------------------------------------------
+MATCH (:Mitglied {name: 'Hans Mueller'})-[b:BESUCHT]->(:Kurs {titel: 'Spinning Power'})
+SET b.status = 'aktiv',
+    b.aktualisiert = date()
+RETURN b.status AS NeuerStatus, b.aktualisiert AS Geaendert;
+
+// ---------------------------------------------------------------
+// Szenario 3 (Kante manipulieren): Der bisher kurslose Trainer
+// "Markus Kraft" übernimmt zusätzlich die Leitung von "Spinning Power".
+// MERGE legt die Kante nur an, falls sie noch nicht existiert (idempotent).
+// ---------------------------------------------------------------
+MATCH (t:Trainer {name: 'Markus Kraft'}), (k:Kurs {titel: 'Spinning Power'})
+MERGE (t)-[r:LEITET]->(k)
+RETURN t.name AS Trainer, type(r) AS Kante, k.titel AS Kurs;

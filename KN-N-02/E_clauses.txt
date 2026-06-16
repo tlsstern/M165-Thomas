@@ -1,0 +1,33 @@
+// KN-N-02 Teil E: Zwei zusätzliche Cypher-Klauseln (SternFitness)
+
+// ===============================================================
+// Klausel 1: UNWIND
+// Wandelt eine Liste in einzelne Zeilen um (Gegenstück zu collect()).
+// Anwendungsfall: Mehrere Mitgliedschaftsstufen aus einer Liste
+// erzeugen und als Ergebniszeilen zurückgeben – nützlich z. B. um
+// in einem Statement aus einer Liste viele Knoten/Kanten anzulegen.
+// ---------------------------------------------------------------
+UNWIND ['Premium', 'Standard', 'Basic'] AS stufe
+RETURN stufe AS Mitgliedschaftsstufe;
+
+// Praxisnah: jedem Kurs aus einer Liste denselben Hinweis hinzufügen
+UNWIND ['CrossFit Basics', 'Spinning Power'] AS kursTitel
+MATCH (k:Kurs {titel: kursTitel})
+SET k.kategorie = 'High Intensity'
+RETURN k.titel AS Kurs, k.kategorie AS Kategorie;
+
+// ===============================================================
+// Klausel 2: CASE
+// Bedingte Ausdrücke (wie if/else in SQL). Liefert je nach
+// Bedingung unterschiedliche Werte zurück, ohne mehrere Abfragen.
+// Anwendungsfall: Kurse nach ihrer Dauer in Längenklassen einteilen.
+// ---------------------------------------------------------------
+MATCH (k:Kurs)
+RETURN k.titel AS Kurs,
+       k.dauer AS Minuten,
+       CASE
+         WHEN k.dauer >= 60 THEN 'Lang'
+         WHEN k.dauer >= 45 THEN 'Mittel'
+         ELSE 'Kurz'
+       END AS Laengenklasse
+ORDER BY Minuten DESC;

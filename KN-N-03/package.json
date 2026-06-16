@@ -1,0 +1,10 @@
+{
+  "name": "kn-n-03-programming",
+  "version": "1.0.0",
+  "description": "Neo4j driver application demonstrating Cypher queries for SternFitness",
+  "main": "app.js",
+  "type": "commonjs",
+  "dependencies": {
+    "neo4j-driver": "^5.28.0"
+  }
+}

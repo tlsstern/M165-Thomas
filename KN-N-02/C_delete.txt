@@ -1,0 +1,34 @@
+// KN-N-02 Teil C: Daten löschen – DELETE vs. DETACH DELETE
+// Gleiches Startobjekt (Mitglied "Hans Mueller") in beiden Fällen.
+// Hans hat Kanten ([:BESUCHT] zu CrossFit Basics und Spinning Power).
+
+// === Vorher: Zustand pruefen (Knoten + seine Kanten anzeigen) ===
+MATCH (hans:Mitglied {name: 'Hans Mueller'})
+OPTIONAL MATCH (hans)-[r]-(nachbar)
+RETURN hans, r, nachbar;
+
+// ---------------------------------------------------------------
+// Fall 1: Löschen OHNE DETACH  ->  schlägt FEHL
+// Neo4j verbietet das Löschen eines Knotens, der noch Kanten besitzt.
+// Erwartete Meldung:
+//   "Cannot delete node<...>, because it still has relationships."
+// ---------------------------------------------------------------
+MATCH (hans:Mitglied {name: 'Hans Mueller'})
+DELETE hans;
+
+// ---------------------------------------------------------------
+// Fall 2: Löschen MIT DETACH  ->  ERFOLGREICH
+// DETACH DELETE entfernt zuerst automatisch alle Kanten des Knotens
+// und löscht danach den Knoten selbst.
+// ---------------------------------------------------------------
+MATCH (hans:Mitglied {name: 'Hans Mueller'})
+DETACH DELETE hans;
+
+// === Nachher: Kontrolle, dass Hans (und seine Kanten) weg sind ===
+MATCH (hans:Mitglied {name: 'Hans Mueller'})
+RETURN hans;
+// -> liefert 0 Zeilen.
+
+// === Hinweis: Datenbestand fuer die naechsten Aufgaben wiederherstellen ===
+// Vor Teil D erneut A_create_data.txt ausfuehren
+// (vorher  MATCH (n) DETACH DELETE n;  zum Aufraeumen).
