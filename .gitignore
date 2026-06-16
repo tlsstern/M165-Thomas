@@ -1,2 +1,4 @@
 .gemini/
 /screencast_tutorials/
+node_modules/
+package-lock.json

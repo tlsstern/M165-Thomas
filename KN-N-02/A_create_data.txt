@@ -36,6 +36,7 @@ CREATE
   (m1)-[:BESUCHT {anmeldedatum: date('2025-02-05'), status: 'warteliste'}]->(k3),
   (m2)-[:BESUCHT {anmeldedatum: date('2025-03-02'), status: 'aktiv'}]->(k2),
   (m4)-[:BESUCHT {anmeldedatum: date('2025-04-02'), status: 'aktiv'}]->(k1),
+  (m4)-[:BESUCHT {anmeldedatum: date('2025-04-03'), status: 'aktiv'}]->(k2),
 
   // --- Kanten: Kurs NUTZT Geraet (mit Attribut anzahl) ---
   (k3)-[:NUTZT {anzahl: 10}]->(g3),
