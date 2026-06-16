@@ -61,7 +61,7 @@ Bei dieser Variante wird ein physisches Backup des EBS-Volume der EC2-Instanz du
     *   Das alte Volume wird detached und das neue, aus dem Snapshot erstellte Volume wird an die Instanz attached (unter demselben Device-Namen, z. B. `/dev/xvda` bzw. `/dev/nvme0n1`).
     *   Der MongoDB-Daemon wird wieder gestartet: `sudo systemctl start mongod`.
     *   Nach dem Mounten des Volumes sind die Daten wieder im ursprünglichen Zustand verfügbar. Die Collection `trainer` und alle ihre 3 Dokumente sind wieder da.
-    **Visualisierung der Datenwiederherstellung (Daten wieder da):*
+    *Visualisierung der Datenwiederherstellung (Daten wieder da):*
     ![Daten wiederhergestellt](./screenshots/07_aws_restored.png)
 
 ### Backup Variante 2: MongoDB Database Tools (Logisches Backup)

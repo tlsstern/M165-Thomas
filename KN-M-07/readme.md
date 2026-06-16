@@ -34,7 +34,7 @@ Das Skript [`app.js`](file:///C:/Projects/M165-Thomas/KN-M-07/app.js) führt fol
 1.  **Verbindungsaufbau:**
     ```javascript
     const { MongoClient } = require('mongodb');
-    const url = 'mongodb://admin:Thomas-Password@localhost:27017/SternFitness?authSource=admin';
+    const url = 'mongodb://admin:Thomas-Password@18.234.82.162:27017/SternFitness?authSource=admin';
     const client = new MongoClient(url);
     await client.connect();
     ```

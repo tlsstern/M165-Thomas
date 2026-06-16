@@ -79,27 +79,27 @@ Standard-JSON hat keine nativen Datentypen für Datumswerte (es kennt nur String
 
 ![User Skript](./screenshots/9_user_skript.png)
 
-*(Hinweis: Ersetzen Sie `Muster` mit dem Namen Ihrer Zieldatenbank, also Ihrem Nachnamen)*
+*(Hinweis: Als Zieldatenbank wird die Themendatenbank `SternFitness` verwendet. Das Passwort `Thomas-Password` ist ein reines Wegwerf-Passwort für die Abgabe und wird sonst nirgends verwendet.)*
 
 ```javascript
-// Benutzer 1 erstellen (Nur Lesen, Authentifizierungsdatenbank: Eigene Datenbank)
-use Muster;
+// Benutzer 1 erstellen (Nur Lesen, Authentifizierungsdatenbank: Themendatenbank)
+use SternFitness;
 db.createUser({
-  user: "user1",
-  pwd: "password1",
-  roles: [ { role: "read", db: "Muster" } ]
+  user: "leser",
+  pwd: "Thomas-Password",
+  roles: [ { role: "read", db: "SternFitness" } ]
 });
 
 // Benutzer 2 erstellen (Lesen & Schreiben, Authentifizierungsdatenbank: admin)
 use admin;
 db.createUser({
-  user: "user2",
-  pwd: "password2",
-  roles: [ { role: "readWrite", db: "Muster" } ]
+  user: "schreiber",
+  pwd: "Thomas-Password",
+  roles: [ { role: "readWrite", db: "SternFitness" } ]
 });
 ```
 
-**Abgabe: Rechte Benutzer 1 (nur lesen)**
+**Abgabe: Rechte Benutzer 1 (`leser`, nur lesen)**
 
 Einloggen (Verbindungstext sichtbar):
 
@@ -113,7 +113,7 @@ Schreiben mit Fehler:
 
 ![User1 Write Error](./screenshots/12_user1_error.png)
 
-**Abgabe: Rechte Benutzer 2 (lesen und schreiben)**
+**Abgabe: Rechte Benutzer 2 (`schreiber`, lesen und schreiben)**
 
 Einloggen (Verbindungstext sichtbar):
 

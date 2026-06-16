@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 // 1. Verbindungs-URL definieren (Standard-Credentials und Zieldatenbank)
-const url = 'mongodb://admin:Thomas-Password@localhost:27017/SternFitness?authSource=admin';
+const url = 'mongodb://admin:Thomas-Password@18.234.82.162:27017/SternFitness?authSource=admin';
 const client = new MongoClient(url);
 
 const dbName = 'SternFitness';
