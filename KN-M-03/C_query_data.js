@@ -1,15 +1,10 @@
-// MongoDB Script für Datenabfragen (KN-M-03 Teil C)
-// Verwendung: load("C_query_data.js") in mongosh oder mongosh < C_query_data.js
-
-// 1. In die Zieldatenbank wechseln
 use SternFitness;
 
-// 2. Datenbank zurücksetzen und Daten neu befüllen für konsistente Ergebnisse
 print("Setze Collections zurueck und befuelle neu...");
-db.mitglieder.drop();
-db.trainer.drop();
-db.kurse.drop();
-db.geraete.drop();
+db.mitglieder.deleteMany({});
+db.trainer.deleteMany({});
+db.kurse.deleteMany({});
+db.geraete.deleteMany({});
 
 var trainerId1 = ObjectId();
 var trainerId2 = ObjectId();
@@ -30,9 +25,9 @@ var mitgliedId3 = ObjectId();
 var mitgliedId4 = ObjectId();
 
 db.trainer.insertMany([
-  { _id: trainerId1, name: "Thomas Stern", spezialisierung: "CrossFit, Personal Training", gehalt: 6200.00, anstellungsdatum: ISODate("2024-01-15T08:00:00Z") },
-  { _id: trainerId2, name: "Sarah Meier", spezialisierung: "Yoga, Pilates", gehalt: 5800.00, anstellungsdatum: ISODate("2024-03-01T09:00:00Z") },
-  { _id: trainerId3, name: "Markus Kraft", spezialisierung: "Kraftsport, Bodybuilding", gehalt: 6000.00, anstellungsdatum: ISODate("2023-11-10T08:30:00Z") }
+  { _id: trainerId1, name: "Thomas Stern", spezialisierung: "CrossFit, Personal Training", gehalt: Double(6200.00), anstellungsdatum: ISODate("2024-01-15T08:00:00Z") },
+  { _id: trainerId2, name: "Sarah Meier", spezialisierung: "Yoga, Pilates", gehalt: Double(5800.00), anstellungsdatum: ISODate("2024-03-01T09:00:00Z") },
+  { _id: trainerId3, name: "Markus Kraft", spezialisierung: "Kraftsport, Bodybuilding", gehalt: Double(6000.00), anstellungsdatum: ISODate("2023-11-10T08:30:00Z") }
 ]);
 
 db.geraete.insertMany([
@@ -104,13 +99,9 @@ db.mitglieder.insertMany([
 
 print("\n=== START DER ABFRAGEN (OHNE FILTERUNG AUF _ID) ===\n");
 
-// A. Filterung auf ein DateTime Feld
-// Abfrage auf 'trainer': Finde alle Trainer, die nach dem 01.01.2024 angestellt wurden.
 print("--- A. Trainer angestellt nach 01.01.2024 (DateTime-Filter) ---");
 db.trainer.find({ anstellungsdatum: { $gt: ISODate("2024-01-01T00:00:00Z") } }).forEach(printjson);
 
-// B. ODER-Verknüpfung in der Filterung (nicht auf _id)
-// Abfrage auf 'geraete': Finde Geraete, die entweder vom Typ 'Kraft' sind ODER ein Wartungsintervall von genau 90 Tagen haben.
 print("\n--- B. Geraete (Typ 'Kraft' OR Wartungsintervall == 90) ---");
 db.geraete.find({
   $or: [
@@ -119,8 +110,6 @@ db.geraete.find({
   ]
 }).forEach(printjson);
 
-// C. UND-Verknüpfung in der Filterung (auf einer anderen Collection als die ODER-Verknüpfung)
-// Abfrage auf 'kurse': Finde alle Kurse, die eine Dauer von mindestens 50 Minuten UND maximal 15 Teilnehmer haben.
 print("\n--- C. Kurse (Dauer >= 50 AND maxTeilnehmer <= 15) ---");
 db.kurse.find({
   $and: [
@@ -129,17 +118,11 @@ db.kurse.find({
   ]
 }).forEach(printjson);
 
-// D. Regex zur Mustersuche für einen Teilstring
-// Abfrage auf 'trainer': Finde alle Trainer, deren Name den Teilstring 'kraft' (case-insensitive) enthaelt.
 print("\n--- D. Trainer mit 'kraft' im Namen (Regex-Filter) ---");
 db.trainer.find({ name: /kraft/i }).forEach(printjson);
 
-// E. Projektion inklusive _id
-// Abfrage auf 'kurse': Zeige nur Titel und Raum an. _id wird standardmaessig mit ausgegeben.
 print("\n--- E. Kurse Projektion (inklusive _id) ---");
 db.kurse.find({ titel: "CrossFit Basics" }, { titel: 1, raum: 1 }).forEach(printjson);
 
-// F. Projektion exklusive _id
-// Abfrage auf 'mitglieder': Zeige nur Name und E-Mail. Die _id wird explizit mit 0 ausgeblendet.
 print("\n--- F. Mitglieder Projektion (exklusive _id) ---");
 db.mitglieder.find({}, { name: 1, email: 1, _id: 0 }).forEach(printjson);

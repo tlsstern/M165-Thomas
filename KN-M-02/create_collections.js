@@ -1,15 +1,15 @@
-// MongoDB Script zur Erstellung der Collections für SternFitness
-// Verwenden Sie: load("create_collections.js") in mongosh oder führen Sie mongosh < create_collections.js aus.
-
-// 1. In die neue Datenbank wechseln
 use SternFitness;
 
-// 2. Collections explizit erstellen
-db.createCollection("mitglieder");
-db.createCollection("trainer");
-db.createCollection("kurse");
-db.createCollection("geraete");
+const gewuenschteCollections = ["mitglieder", "trainer", "kurse", "geraete"];
 
-// 3. Ausgeben der erstellten Collections zur Überprüfung
-print("Erstellte Collections in Datenbank:");
-db.getCollectionNames().forEach(print);
+gewuenschteCollections.forEach(function (name) {
+  if (db.getCollectionNames().indexOf(name) === -1) {
+    db.createCollection(name);
+    print("Collection '" + name + "' wurde erstellt.");
+  } else {
+    print("Collection '" + name + "' existiert bereits.");
+  }
+});
+
+print("\nVorhandene Collections in 'SternFitness':");
+db.getCollectionNames().forEach(name => print("  - " + name));

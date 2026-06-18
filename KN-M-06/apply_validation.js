@@ -1,12 +1,7 @@
-// MongoDB Script zur Registrierung der JSON Schemas (KN-M-06 Teil B)
-// Verwendung: load("apply_validation.js") in mongosh
-
-// Zieldatenbank verwenden
 use SternFitness;
 
 print("Hinterlege JSON-Schema Validierung fuer Collections...");
 
-// Validator fuer 'trainer' setzen
 db.runCommand({
   collMod: "trainer",
   validator: {
@@ -25,7 +20,6 @@ db.runCommand({
   validationAction: "error"
 });
 
-// Validator fuer 'geraete' setzen
 db.runCommand({
   collMod: "geraete",
   validator: {
@@ -44,7 +38,6 @@ db.runCommand({
   validationAction: "error"
 });
 
-// Validator fuer 'kurse' setzen
 db.runCommand({
   collMod: "kurse",
   validator: {
@@ -64,7 +57,6 @@ db.runCommand({
   validationAction: "error"
 });
 
-// Validator fuer 'mitglieder' setzen
 db.runCommand({
   collMod: "mitglieder",
   validator: {
@@ -108,6 +100,5 @@ db.runCommand({
 
 print("--- Validierungen erfolgreich hinterlegt ---");
 
-// Auslesen der Validierung zur Kontrolle
 print("Ueberpruefe Validierung der Collection 'trainer':");
 printjson(db.getCollectionInfos({ name: "trainer" })[0].options.validator);

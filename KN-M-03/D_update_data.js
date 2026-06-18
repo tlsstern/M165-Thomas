@@ -1,15 +1,10 @@
-// MongoDB Script zur Datenänderung (KN-M-03 Teil D)
-// Verwendung: load("D_update_data.js") in mongosh oder mongosh < D_update_data.js
-
-// 1. In die Zieldatenbank wechseln
 use SternFitness;
 
-// 2. Datenbank zurücksetzen und Daten neu befüllen für konsistente Ergebnisse
 print("Setze Collections zurueck und befuelle neu...");
-db.mitglieder.drop();
-db.trainer.drop();
-db.kurse.drop();
-db.geraete.drop();
+db.mitglieder.deleteMany({});
+db.trainer.deleteMany({});
+db.kurse.deleteMany({});
+db.geraete.deleteMany({});
 
 var trainerId1 = ObjectId();
 var trainerId2 = ObjectId();
@@ -30,9 +25,9 @@ var mitgliedId3 = ObjectId();
 var mitgliedId4 = ObjectId();
 
 db.trainer.insertMany([
-  { _id: trainerId1, name: "Thomas Stern", spezialisierung: "CrossFit, Personal Training", gehalt: 6200.00, anstellungsdatum: ISODate("2024-01-15T08:00:00Z") },
-  { _id: trainerId2, name: "Sarah Meier", spezialisierung: "Yoga, Pilates", gehalt: 5800.00, anstellungsdatum: ISODate("2024-03-01T09:00:00Z") },
-  { _id: trainerId3, name: "Markus Kraft", spezialisierung: "Kraftsport, Bodybuilding", gehalt: 6000.00, anstellungsdatum: ISODate("2023-11-10T08:30:00Z") }
+  { _id: trainerId1, name: "Thomas Stern", spezialisierung: "CrossFit, Personal Training", gehalt: Double(6200.00), anstellungsdatum: ISODate("2024-01-15T08:00:00Z") },
+  { _id: trainerId2, name: "Sarah Meier", spezialisierung: "Yoga, Pilates", gehalt: Double(5800.00), anstellungsdatum: ISODate("2024-03-01T09:00:00Z") },
+  { _id: trainerId3, name: "Markus Kraft", spezialisierung: "Kraftsport, Bodybuilding", gehalt: Double(6000.00), anstellungsdatum: ISODate("2023-11-10T08:30:00Z") }
 ]);
 
 db.geraete.insertMany([
@@ -102,20 +97,16 @@ db.mitglieder.insertMany([
   }
 ]);
 
-print("\n=== VERÄNDERUNGEN AUSFÜHREN ===\n");
+print("\n=== VERAENDERUNGEN AUSFUEHREN ===\n");
 
-// A. updateOne() mit _id als Filter
-// Abfrage auf 'trainer': Erhöhe das Gehalt von Thomas Stern (trainerId1) auf 6500.00 und erweitere die Spezialisierung.
 print("--- A. updateOne auf 'trainer' via _id ---");
 var updateRes = db.trainer.updateOne(
   { _id: trainerId1 },
-  { $set: { gehalt: 6500.00, spezialisierung: "CrossFit, Personal Training, Ernährungsberatung" } }
+  { $set: { gehalt: Double(6500.00), spezialisierung: "CrossFit, Personal Training, Ernaehrungsberatung" } }
 );
 print("Resultat: " + updateRes.modifiedCount + " Dokument(e) aktualisiert.");
 printjson(db.trainer.findOne({ _id: trainerId1 }));
 
-// B. updateMany() OHNE Verwendung der _id, mit einer ODER-Verknüpfung
-// Abfrage auf 'geraete': Setze das Wartungsintervall aller Geraete vom Typ 'Kardio' ODER Geraete, die vor dem 31.12.2024 angeschafft wurden, auf 90 Tage.
 print("\n--- B. updateMany auf 'geraete' via ODER-Filter (Typ 'Kardio' OR Anschaffung < 2025) ---");
 var updateManyRes = db.geraete.updateMany(
   {
@@ -124,13 +115,11 @@ var updateManyRes = db.geraete.updateMany(
       { anschaffungsdatum: { $lt: ISODate("2024-12-31T00:00:00Z") } }
     ]
   },
-  { $set: { wartungsintervall: 90, status: "Wartung ausstehend" } }
+  { $set: { wartungsintervall: 90 } }
 );
 print("Resultat: " + updateManyRes.modifiedCount + " Dokument(e) aktualisiert.");
 db.geraete.find({ wartungsintervall: 90 }).forEach(printjson);
 
-// C. replaceOne() um ein Dokument komplett zu ersetzen (unter Beibehaltung der _id)
-// Abfrage auf 'kurse': Ersetze den Kurs 'Spinning Power' (kursId3) durch den neuen Kurs 'Indoor Cycling Intense'.
 print("\n--- C. replaceOne auf 'kurse' zur Ersetzung des Dokuments ---");
 var replaceRes = db.kurse.replaceOne(
   { _id: kursId3 },
@@ -139,8 +128,7 @@ var replaceRes = db.kurse.replaceOne(
     raum: "Kardio-Raum 2",
     dauer: 60,
     maxTeilnehmer: 10,
-    trainer_id: trainerId1,
-    niveau: "Fortgeschritten"
+    trainer_id: trainerId1
   }
 );
 print("Resultat: " + replaceRes.modifiedCount + " Dokument(e) ersetzt.");

@@ -38,30 +38,20 @@ Der folgende Screenshot zeigt den daraus resultierenden Fehler:
 
 Wir haben beide geforderten Backup-Methoden implementiert und dokumentiert:
 
-### Backup Variante 1: AWS Volume Snapshots (Infrastruktur-Backup)
+### Backup Variante 1: AWS EBS Volume Snapshots (Infrastruktur-Backup)
 
-Bei dieser Variante wird ein physisches Backup des EBS-Volume der EC2-Instanz durchgeführt. Dies sichert die Datenbank auf Dateisystemebene.
+Bei dieser Variante wird ein physisches Backup des EBS-Volumes der EC2-Instanz erstellt. Dies sichert die Datenbank auf Dateisystemebene.
 
 1.  **Snapshot des Volumes erstellen:**
-    Über das AWS CLI (oder die AWS Management Console) wird ein Snapshot des Volumes `vol-0f6a27e35b719c8d2` der EC2-Instanz `i-0d86506da93613f37` erstellt.
-    ```bash
-    aws ec2 create-snapshot --volume-id vol-0f6a27e35b719c8d2 --description "MongoDB SternFitness Backup KN-M-05"
-    ```
-    *Visualisierung der Snapshot-Erstellung (AWS CLI):*
+    Vom EBS-Volume der Instanz wird in der AWS-Konsole ein Snapshot erstellt.
     ![AWS Snapshot Erstellung](./screenshots/05_aws_snapshot.png)
 
 2.  **Simulation eines Datenverlusts (Löschen der Collection):**
-    Wir löschen die Collection `trainer` über die Shell (`db.trainer.drop()`), um einen Datenverlust zu simulieren. Die Abfrage nach dem Löschen liefert keine Ergebnisse mehr und `show collections;` listet die Collection nicht mehr auf.
-    *Visualisierung der Datenlöschung (Datenbank leer):*
+    Die Collection `trainer` wird mit `db.trainer.drop()` gelöscht. Danach liefert die Abfrage keine Ergebnisse mehr und `show collections;` listet die Collection nicht mehr auf.
     ![Daten gelöscht](./screenshots/06_aws_deleted.png)
 
 3.  **Wiederherstellung des Volumes aus dem Snapshot:**
-    *   Aus dem erstellten Snapshot wird ein neues Volume in derselben Availability Zone (AZ) erstellt.
-    *   Der MongoDB-Daemon auf dem Server wird gestoppt: `sudo systemctl stop mongod`.
-    *   Das alte Volume wird detached und das neue, aus dem Snapshot erstellte Volume wird an die Instanz attached (unter demselben Device-Namen, z. B. `/dev/xvda` bzw. `/dev/nvme0n1`).
-    *   Der MongoDB-Daemon wird wieder gestartet: `sudo systemctl start mongod`.
-    *   Nach dem Mounten des Volumes sind die Daten wieder im ursprünglichen Zustand verfügbar. Die Collection `trainer` und alle ihre 3 Dokumente sind wieder da.
-    *Visualisierung der Datenwiederherstellung (Daten wieder da):*
+    Aus dem Snapshot wird ein neues Volume in derselben Availability Zone erstellt und an die Instanz angehängt. Nach dem Neustart sind die Collection `trainer` und alle Dokumente wieder vorhanden.
     ![Daten wiederhergestellt](./screenshots/07_aws_restored.png)
 
 ### Backup Variante 2: MongoDB Database Tools (Logisches Backup)

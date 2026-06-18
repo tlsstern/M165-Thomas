@@ -1,11 +1,8 @@
-// MongoDB Script zur Benutzererstellung für SternFitness (KN-M-05 Teil A)
-// Verwendung: Führen Sie das Skript als admin aus:
-// mongosh -u admin -p Thomas-Password --authenticationDatabase admin < create_users.js
-
-// 1. Benutzer 1 erstellen (Nur Lesen, Authentifizierungsdatenbank: SternFitness)
-// In die Themendatenbank wechseln, damit der Benutzer physisch dort angelegt wird
 use SternFitness;
 
+if (db.getUsers().users.some(u => u.user === "leser")) {
+  db.dropUser("leser");
+}
 print("Erstelle Benutzer 1 (leser)...");
 db.createUser({
   user: "leser",
@@ -15,10 +12,11 @@ db.createUser({
   ]
 });
 
-// 2. Benutzer 2 erstellen (Lesen und Schreiben, Authentifizierungsdatenbank: admin)
-// In die admin Datenbank wechseln, damit der Benutzer physisch dort angelegt wird
 use admin;
 
+if (db.getUsers().users.some(u => u.user === "schreiber")) {
+  db.dropUser("schreiber");
+}
 print("Erstelle Benutzer 2 (schreiber)...");
 db.createUser({
   user: "schreiber",

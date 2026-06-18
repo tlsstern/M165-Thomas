@@ -1,39 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="Electron" modified="2026-06-02T12:00:00.000Z" agent="5.0" version="20.0.0" type="device">
+<mxfile host="Electron" modified="2026-06-18T12:00:00.000Z" agent="5.0" version="20.0.0" type="device">
   <diagram id="LogicalModel" name="SternFitness Logical Model">
-    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="900" pageHeight="650" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        
-        <!-- Collection: mitglieder -->
-        <mxCell id="col_mitglieder" value="Collection: mitglieder&#xa;&#xa;+ _id: ObjectId [PK]&#xa;+ name: String&#xa;+ geschlecht: Char&#xa;+ email: String&#xa;+ telefon: String&#xa;+ geburtsdatum: Date&#xa;+ eintrittsdatum: Date&#xa;+ adresse: Object (embedded)&#xa;  - strasse: String&#xa;  - plz: String&#xa;  - ort: String&#xa;+ kurs_anmeldungen: Array (embedded)&#xa;  - kurs_id: ObjectId [Ref: kurse]&#xa;  - anmeldedatum: Date&#xa;  - status: String" style="shape=swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="40" y="80" width="280" height="300" as="geometry" />
+
+        <!-- Title -->
+        <mxCell id="title" value="SternFitness — Logisches Datenmodell (MongoDB)" style="text;html=1;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="500" height="30" as="geometry" />
         </mxCell>
-        
-        <!-- Collection: trainer -->
-        <mxCell id="col_trainer" value="Collection: trainer&#xa;&#xa;+ _id: ObjectId [PK]&#xa;+ name: String&#xa;+ spezialisierung: String&#xa;+ gehalt: Double&#xa;+ anstellungsdatum: Date" style="shape=swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="480" y="80" width="240" height="150" as="geometry" />
+
+        <!-- ===== Collection: mitglieder (green) ===== -->
+        <mxCell id="h_mit" value="Collection: mitglieder" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#82b366;strokeColor=#82b366;fontColor=#ffffff;fontStyle=1;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="300" height="28" as="geometry" />
         </mxCell>
-        
-        <!-- Collection: kurse -->
-        <mxCell id="col_kurse" value="Collection: kurse&#xa;&#xa;+ _id: ObjectId [PK]&#xa;+ titel: String&#xa;+ raum: String&#xa;+ dauer: Int&#xa;+ max_teilnehmer: Int&#xa;+ trainer_id: ObjectId [Ref: trainer]" style="shape=swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="480" y="320" width="240" height="170" as="geometry" />
+        <mxCell id="b_mit" value="+ _id: ObjectId [PK]&#xa;+ name: String&#xa;+ geschlecht: Char&#xa;+ email: String&#xa;+ telefon: String&#xa;+ geburtsdatum: Date&#xa;+ eintrittsdatum: Date&#xa;+ adresse: Object (embedded)&#xa;&#160;&#160;&#160;- strasse: String&#xa;&#160;&#160;&#160;- plz: String&#xa;&#160;&#160;&#160;- ort: String&#xa;+ kurs_anmeldungen: Array (embedded)&#xa;&#160;&#160;&#160;- kurs_id: ObjectId [Ref: kurse]&#xa;&#160;&#160;&#160;- anmeldedatum: Date&#xa;&#160;&#160;&#160;- status: String" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="40" y="98" width="300" height="282" as="geometry" />
         </mxCell>
-        
-        <!-- Collection: geraete -->
-        <mxCell id="col_geraete" value="Collection: geraete&#xa;&#xa;+ _id: ObjectId [PK]&#xa;+ bezeichnung: String&#xa;+ typ: String&#xa;+ anschaffungsdatum: Date&#xa;+ wartungsintervall: Int" style="shape=swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="40" y="440" width="240" height="150" as="geometry" />
+
+        <!-- ===== Collection: trainer (blue) ===== -->
+        <mxCell id="h_tra" value="Collection: trainer" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#6c8ebf;fontColor=#ffffff;fontStyle=1;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="560" y="70" width="280" height="28" as="geometry" />
         </mxCell>
-        
-        <!-- Connection: mitglieder -> kurse (Reference) -->
-        <mxCell id="edge_ref_mk" value="Referenced (kurs_id)" style="endArrow=classic;html=1;exitX=1;exitY=0.8;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" parent="1" source="col_mitglieder" target="col_kurse">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        <mxCell id="b_tra" value="+ _id: ObjectId [PK]&#xa;+ name: String&#xa;+ spezialisierung: String&#xa;+ gehalt: Double&#xa;+ anstellungsdatum: Date" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="560" y="98" width="280" height="100" as="geometry" />
         </mxCell>
-        
-        <!-- Connection: kurse -> trainer (Reference) -->
-        <mxCell id="edge_ref_kt" value="Referenced (trainer_id)" style="endArrow=classic;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="col_kurse" target="col_trainer">
-          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+
+        <!-- ===== Collection: kurse (blue) ===== -->
+        <mxCell id="h_kur" value="Collection: kurse" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#6c8ebf;fontColor=#ffffff;fontStyle=1;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="560" y="300" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_kur" value="+ _id: ObjectId [PK]&#xa;+ titel: String&#xa;+ raum: String&#xa;+ dauer: Int&#xa;+ maxTeilnehmer: Int&#xa;+ trainer_id: ObjectId [Ref: trainer]&#xa;+ geraet_ids: Array [Ref: geraete]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="560" y="328" width="280" height="135" as="geometry" />
+        </mxCell>
+
+        <!-- ===== Collection: geraete (red) ===== -->
+        <mxCell id="h_ger" value="Collection: geraete" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b85450;strokeColor=#b85450;fontColor=#ffffff;fontStyle=1;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="280" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="b_ger" value="+ _id: ObjectId [PK]&#xa;+ bezeichnung: String&#xa;+ typ: String&#xa;+ anschaffungsdatum: Date&#xa;+ wartungsintervall: Int" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="40" y="468" width="280" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ===== Relationships ===== -->
+        <!-- mitglieder.kurs_anmeldungen.kurs_id -> kurse (N:M, referenced) -->
+        <mxCell id="edge_mk" value="kurs_id (N:M)" style="endArrow=classic;html=1;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.45;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=11;" edge="1" parent="1" source="b_mit" target="b_kur">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- kurse.trainer_id -> trainer (N:1, referenced) -->
+        <mxCell id="edge_kt" value="trainer_id (N:1)" style="endArrow=classic;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;fontSize=11;" edge="1" parent="1" source="b_kur" target="b_tra">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- kurse.geraet_ids -> geraete (N:M, referenced) -->
+        <mxCell id="edge_kg" value="geraet_ids (N:M)" style="endArrow=classic;html=1;exitX=0;exitY=0.6;exitDx=0;exitDy=0;entryX=1;entryY=0.4;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=11;" edge="1" parent="1" source="b_kur" target="b_ger">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===== Legend ===== -->
+        <mxCell id="legend" value="Legende&#xa;embedded = eingebettetes (Sub-)Dokument / Array&#xa;[Ref: x] = Referenz auf Collection x (ObjectId)&#xa;Durchgezogener Pfeil = N:1 · Gestrichelt = N:M" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=11;fillColor=#f5f5f5;strokeColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="560" y="490" width="300" height="78" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

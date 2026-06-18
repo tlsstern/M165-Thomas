@@ -1,10 +1,10 @@
-// MongoDB Script zur Dateninfügung für SternFitness (KN-M-03 Teil A)
-// Verwendung: load("A_insert_data.js") in mongosh oder mongosh < A_insert_data.js
-
-// 1. In die Zieldatenbank wechseln
 use SternFitness;
 
-// 2. ObjectIds als Variablen definieren (Keine hartcodierten IDs in den Daten)
+db.mitglieder.deleteMany({});
+db.trainer.deleteMany({});
+db.kurse.deleteMany({});
+db.geraete.deleteMany({});
+
 var trainerId1 = ObjectId();
 var trainerId2 = ObjectId();
 var trainerId3 = ObjectId();
@@ -23,32 +23,30 @@ var mitgliedId2 = ObjectId();
 var mitgliedId3 = ObjectId();
 var mitgliedId4 = ObjectId();
 
-// 3. Trainer einfügen (3 Datensätze) - Verwendung von insertMany
 db.trainer.insertMany([
   {
     _id: trainerId1,
     name: "Thomas Stern",
     spezialisierung: "CrossFit, Personal Training",
-    gehalt: 6200.00,
+    gehalt: Double(6200.00),
     anstellungsdatum: ISODate("2024-01-15T08:00:00Z")
   },
   {
     _id: trainerId2,
     name: "Sarah Meier",
     spezialisierung: "Yoga, Pilates",
-    gehalt: 5800.00,
+    gehalt: Double(5800.00),
     anstellungsdatum: ISODate("2024-03-01T09:00:00Z")
   },
   {
     _id: trainerId3,
     name: "Markus Kraft",
     spezialisierung: "Kraftsport, Bodybuilding",
-    gehalt: 6000.00,
+    gehalt: Double(6000.00),
     anstellungsdatum: ISODate("2023-11-10T08:30:00Z")
   }
 ]);
 
-// 4. Geräte einfügen (4 Datensätze) - Verwendung von insertMany
 db.geraete.insertMany([
   {
     _id: geraetId1,
@@ -80,7 +78,6 @@ db.geraete.insertMany([
   }
 ]);
 
-// 5. Kurse einfügen (3 Datensätze) - Verwendung von insertMany
 db.kurse.insertMany([
   {
     _id: kursId1,
@@ -108,7 +105,6 @@ db.kurse.insertMany([
   }
 ]);
 
-// 6. Mitglieder einfügen (4 Datensätze) - Verwendung von insertOne für jedes Dokument
 db.mitglieder.insertOne({
   _id: mitgliedId1,
   name: "Hans Mueller",
@@ -196,7 +192,6 @@ db.mitglieder.insertOne({
   ]
 });
 
-// 7. Kontrollausgabe
 print("--- Datenbefuellung abgeschlossen ---");
 print("Trainer eingefuegt: " + db.trainer.countDocuments());
 print("Geraete eingefuegt: " + db.geraete.countDocuments());

@@ -55,6 +55,8 @@ Für "SternFitness" haben wir folgende Architektur gewählt:
   - *Begründung:* Das ist ein hybrider Ansatz (Referenced Bookings). Anstatt eine separate Verknüpfungstabelle wie in SQL zu erstellen, betten wir die Anmeldungsdetails direkt im Mitglied ein. Die `kurs_id` verweist auf die `kurse`-Collection, da Kurse unabhängig existieren und eine eigene Lebensdauer besitzen. Da ein Mitglied im Regelfall nicht zehntausende Kurse besucht, droht kein Verstoß gegen die 16MB-Dokumentengrößenbeschränkung von MongoDB.
 - **Flache Referenzierung (`trainer_id` in Kurs):** Kurse verweisen über `trainer_id` auf den Trainer.
   - *Begründung:* Ein Trainer leitet viele Kurse, aber Trainer-Daten (wie Gehalt oder Anstellungsdatum) ändern sich unabhängig von den Kursen und sollten nicht dupliziert werden, um Anomalien zu vermeiden.
+- **Referenz-Array (`geraet_ids` in Kurs):** Die N:M-Beziehung "nutzt" aus dem konzeptionellen Modell (Kurs ↔ Gerät) wird als Array von Referenzen (`geraet_ids: [ObjectId, ...]`) in der `kurse`-Collection umgesetzt.
+  - *Begründung:* Geräte existieren unabhängig von Kursen und werden in mehreren Kursen verwendet, daher wäre ein Einbetten redundant und würde bei Geräte-Änderungen Anomalien erzeugen. Das Array liegt auf der `kurse`-Seite, weil die typische Abfrage lautet "welche Geräte benötigt dieser Kurs?". Für eine reine N:M-Verknüpfung genügen die Referenzen, daher trägt diese Kante – anders als `kurs_anmeldungen` – keine eigenen Attribute.
 
 ### Datentyp Char in MongoDB / BSON
 > [!NOTE]
