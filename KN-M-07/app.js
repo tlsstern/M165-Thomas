@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const url = 'mongodb://admin:Thomas-Password@54.147.24.15:27017/SternFitness?authSource=admin';
+const url = 'mongodb://admin:Thomas-Password@54.227.72.72:27017/SternFitness?authSource=admin';
 const client = new MongoClient(url);
 
 const dbName = 'SternFitness';
