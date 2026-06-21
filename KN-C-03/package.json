@@ -1,0 +1,12 @@
+{
+  "name": "kn-c-03",
+  "version": "1.0.0",
+  "description": "KN-C-03: Zugriff auf Cassandra mit dem Node.js cassandra-driver",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "cassandra-driver": "^4.7.2"
+  }
+}
