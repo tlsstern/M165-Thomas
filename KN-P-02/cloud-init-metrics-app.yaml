@@ -1,0 +1,61 @@
+#cloud-config
+# KN-P-02 B) Hostet die eigene Metrics-App (app.js) auf einem zusaetzlichen
+# AWS-Server. Node.js wird installiert, die App als systemd-Service gestartet,
+# damit der /metrics-Endpoint dauerhaft laeuft und von Prometheus gescrapt
+# werden kann.
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    home: /home/ubuntu
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCPIIO8uY8oWIihDv0tCAbX6toyG1RYkaLZyfGD1L+I07K4CnwAVBSU+81vw3Yv5sN9tj2Ccve9kzEeCNMld2mDP/Tt7edkx2MCToVfVx+njqwY/XbMY9bfdRKJLhIoLavuVNLnnkSIXdtlGr3JF71hPHzBDMEo64ofPCQ8hPsGxL1u3efb12jcWcRhudKtv7Qh6cVE47Zj4xImfi6VlLqwzcKZ5oCqR/z1hLLL+/pS3eM5Qsor5wmAqNfH4+z5eE+pOkFm7a0Nkygv9jwXIqtJzFGKYDe6ciBD04pEovdvY0FTyiv2vksQOVgjtu2faG2Iv1HOG0JktCIwJ49OEgjT teacher
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKCuWX/W66sjjNiDNuPpKgYO1xFqDoMJoeo5hz2LDNrF teacher-wir
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDBDu2TqKRTR5fQ3n+p7ch7THeGjPEDyK8vl3mUKkBUZqSl3b7sMSTwB8gClMLGu5Y++9PjWpbrH+x4HjaqEHj6CbseBIhkRioZI3A4d8GzbYWtYCtViDy+8mXL5nub5QM3o9cohhRXHooWxP7J3QDuw45wEIK5VlfYSN4dwTiCkl/l6b/jTOhPWqT9sNvrMAvsIfwD6QHLtRO7EcHNuBqk8fRlEsfJYMBeuBA3qvyQIpnLzkw3r6rQgnXQuztJFXLPAn3RKvvRHh/vu4Rfov8bAOjHT+MGBVTcGI72zxLGXMiRd5UkkH0UPaiJWrJCYUHbM0qmuSvYT/qcsI/u+N4r Thomas
+ssh_pwauth: true
+disable_root: false
+package_update: true
+packages:
+  - nodejs
+write_files:
+  - path: /opt/metrics-app/app.js
+    permissions: '0644'
+    content: |
+      const http = require("http");
+      const PORT = 8080;
+      const server = http.createServer((req, res) => {
+        if (req.url === "/metrics") {
+          const wert = Math.floor(Math.random() * 101);
+          res.writeHead(200, { "Content-Type": "text/plain; version=0.0.4" });
+          res.end(
+            "# HELP sternfitness_random_value Simulierte Kennzahl (Zufallswert 0-100), z. B. Requests pro Sekunde\n" +
+              "# TYPE sternfitness_random_value gauge\n" +
+              `sternfitness_random_value ${wert}\n`
+          );
+        } else {
+          res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
+          res.end("SternFitness Metrics-App (KN-P-02). Metrik unter /metrics\n");
+        }
+      });
+      server.listen(PORT, "0.0.0.0", () => {
+        console.log(`Metrics-App laeuft auf Port ${PORT}, Endpoint /metrics`);
+      });
+  - path: /etc/systemd/system/metrics-app.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=SternFitness Metrics App (KN-P-02)
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/node /opt/metrics-app/app.js
+      Restart=always
+      User=ubuntu
+
+      [Install]
+      WantedBy=multi-user.target
+runcmd:
+  - sudo systemctl daemon-reload
+  - sudo systemctl enable metrics-app.service
+  - sudo systemctl start metrics-app.service
