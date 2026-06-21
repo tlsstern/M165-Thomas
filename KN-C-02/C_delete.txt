@@ -1,0 +1,23 @@
+// KN-C-02 Teil C: Daten loeschen (SternFitness)
+// Zeigt: (1) ganze Zeile via Partition- + Clustering-Key loeschen,
+//        (2) eine EINZELNE Spalte einer Zeile loeschen.
+// Ausfuehren mit:  cqlsh 13.220.49.223 9042 -f C_delete.txt
+
+USE sternfitness;
+
+// --- Vorher: Stand pruefen ---
+SELECT kurs_titel, status, mitglied_name FROM kursteilnehmer_by_kurs WHERE kurs_id = 1;
+
+// 1) Ganze Zeile loeschen, gefiltert ueber Partition- + Clustering-Keys
+//    (Sam Jones von der Warteliste des Kurses "CrossFit Basics" entfernen)
+DELETE FROM kursteilnehmer_by_kurs
+WHERE kurs_id = 1 AND status = 'warteliste' AND mitglied_id = 3;
+
+// 2) EINZELNE Spalte einer Zeile loeschen (nicht die ganze Zeile)
+//    -> Ja, das geht: nur das Feld anmeldedatum wird auf null gesetzt, die Zeile bleibt.
+DELETE anmeldedatum FROM kurse_by_mitglied
+WHERE mitglied_id = 1 AND kurs_id = 2;
+
+// --- Nachher: Kontrolle ---
+SELECT kurs_titel, status, mitglied_name FROM kursteilnehmer_by_kurs WHERE kurs_id = 1;
+SELECT kurs_titel, status, anmeldedatum  FROM kurse_by_mitglied      WHERE mitglied_id = 1;

@@ -1,0 +1,30 @@
+// KN-C-02 Teil B: Daten abfragen (SternFitness)
+// Jede Abfrage filtert ueber den Partition-Key (Cassandra-Pflicht, kein ALLOW FILTERING noetig).
+// Ausfuehren mit:  cqlsh 13.220.49.223 9042 -f B_queries.txt
+
+USE sternfitness;
+
+// Szenario 1: Komplette Teilnehmerliste eines Kurses (Partition-Key kurs_id)
+SELECT kurs_titel, status, mitglied_name, anmeldedatum
+FROM kursteilnehmer_by_kurs
+WHERE kurs_id = 1;
+
+// Szenario 2: Nur AKTIVE Teilnehmer eines Kurses (Partition-Key + 1. Clustering-Key status)
+SELECT mitglied_name, anmeldedatum
+FROM kursteilnehmer_by_kurs
+WHERE kurs_id = 1 AND status = 'aktiv';
+
+// Szenario 3: Kursplan eines Mitglieds (Partition-Key mitglied_id)
+SELECT kurs_titel, status, anmeldedatum
+FROM kurse_by_mitglied
+WHERE mitglied_id = 1;
+
+// Szenario 4: Alle Kurse eines Trainers (Partition-Key trainer_id)
+SELECT kurs_titel, raum, dauer
+FROM kurse_by_trainer
+WHERE trainer_id = 1;
+
+// Szenario 5: Geraetebedarf eines Kurses (Partition-Key kurs_id)
+SELECT geraet_bezeichnung, typ, anzahl
+FROM geraete_by_kurs
+WHERE kurs_id = 1;

@@ -1,0 +1,30 @@
+// KN-C-02 Teil D: Daten veraendern (SternFitness) - 3 Szenarien
+// Ausfuehren mit:  cqlsh 13.220.49.223 9042 -f D_updates.txt
+
+USE sternfitness;
+
+// Szenario 1: Raumwechsel - "CrossFit Basics" zieht von Halle A nach Halle C um
+//             und wird auf 75 Minuten verlaengert. (UPDATE auf Nicht-Schluessel-Spalten)
+UPDATE kurse_by_trainer SET raum = 'Halle C', dauer = 75
+WHERE trainer_id = 1 AND kurs_id = 1;
+SELECT kurs_titel, raum, dauer FROM kurse_by_trainer WHERE trainer_id = 1;
+
+// Szenario 2: Mehrbedarf - "Spinning Power" braucht neu 12 statt 10 Bikes.
+//             (UPDATE des Mengen-Attributs anzahl)
+UPDATE geraete_by_kurs SET anzahl = 12
+WHERE kurs_id = 2 AND geraet_id = 2;
+SELECT geraet_bezeichnung, anzahl FROM geraete_by_kurs WHERE kurs_id = 2;
+
+// Szenario 3 (Herausforderung): Statuswechsel von Hans Mueller in "Spinning Power"
+//   von 'warteliste' auf 'aktiv'.
+//   In kursteilnehmer_by_kurs ist status Teil des PRIMAERSCHLUESSELS -> ein direktes
+//   UPDATE ist NICHT erlaubt. Loesung: alte Zeile loeschen + neue Zeile einfuegen.
+//   In kurse_by_mitglied ist status eine normale Spalte -> dort genuegt ein UPDATE.
+//   (Denormalisierung: beide Tabellen muessen konsistent gehalten werden.)
+DELETE FROM kursteilnehmer_by_kurs
+WHERE kurs_id = 2 AND status = 'warteliste' AND mitglied_id = 1;
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum)
+VALUES (2, 'aktiv', 1, 'Spinning Power', 'Hans Mueller', '2025-02-08');
+UPDATE kurse_by_mitglied SET status = 'aktiv'
+WHERE mitglied_id = 1 AND kurs_id = 2;
+SELECT kurs_titel, status FROM kurse_by_mitglied WHERE mitglied_id = 1;

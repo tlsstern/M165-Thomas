@@ -1,0 +1,34 @@
+// KN-C-02 Teil A: Daten hinzufuegen (SternFitness, Cassandra)
+// Pro Partitions-Key bewusst mehrere Datensaetze (z.B. Kurs 1 hat 3 Teilnehmer).
+// Ausfuehren mit:  cqlsh 13.220.49.223 9042 -f A_insert_data.txt
+
+USE sternfitness;
+
+// --- kursteilnehmer_by_kurs (mehrere Zeilen pro Partition kurs_id) ---
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (1, 'aktiv',     1, 'CrossFit Basics', 'Hans Mueller', '2025-02-02');
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (1, 'aktiv',     2, 'CrossFit Basics', 'Anna Weber',   '2025-02-05');
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (1, 'warteliste',3, 'CrossFit Basics', 'Sam Jones',    '2025-02-10');
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (2, 'aktiv',     4, 'Spinning Power',  'Lisa Klein',   '2025-02-03');
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (2, 'warteliste',1, 'Spinning Power',  'Hans Mueller', '2025-02-08');
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (3, 'aktiv',     2, 'Yoga Flow',       'Anna Weber',   '2025-02-06');
+INSERT INTO kursteilnehmer_by_kurs (kurs_id, status, mitglied_id, kurs_titel, mitglied_name, anmeldedatum) VALUES (3, 'aktiv',     4, 'Yoga Flow',       'Lisa Klein',   '2025-02-07');
+
+// --- kurse_by_mitglied (mehrere Zeilen pro Partition mitglied_id) ---
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (1, 1, 'Hans Mueller', 'CrossFit Basics', 'aktiv',      '2025-02-02');
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (1, 2, 'Hans Mueller', 'Spinning Power',  'warteliste', '2025-02-08');
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (2, 1, 'Anna Weber',   'CrossFit Basics', 'aktiv',      '2025-02-05');
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (2, 3, 'Anna Weber',   'Yoga Flow',       'aktiv',      '2025-02-06');
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (3, 1, 'Sam Jones',    'CrossFit Basics', 'warteliste', '2025-02-10');
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (4, 2, 'Lisa Klein',   'Spinning Power',  'aktiv',      '2025-02-03');
+INSERT INTO kurse_by_mitglied (mitglied_id, kurs_id, mitglied_name, kurs_titel, status, anmeldedatum) VALUES (4, 3, 'Lisa Klein',   'Yoga Flow',       'aktiv',      '2025-02-07');
+
+// --- kurse_by_trainer (mehrere Zeilen pro Partition trainer_id) ---
+INSERT INTO kurse_by_trainer (trainer_id, kurs_id, trainer_name, spezialisierung, kurs_titel, raum, dauer) VALUES (1, 1, 'Thomas Stern', 'CrossFit, Personal Training', 'CrossFit Basics', 'Halle A',  60);
+INSERT INTO kurse_by_trainer (trainer_id, kurs_id, trainer_name, spezialisierung, kurs_titel, raum, dauer) VALUES (1, 2, 'Thomas Stern', 'CrossFit, Personal Training', 'Spinning Power',  'Halle B',  45);
+INSERT INTO kurse_by_trainer (trainer_id, kurs_id, trainer_name, spezialisierung, kurs_titel, raum, dauer) VALUES (2, 3, 'Sarah Meier',  'Yoga, Pilates',               'Yoga Flow',       'Studio 1', 50);
+
+// --- geraete_by_kurs (mehrere Zeilen pro Partition kurs_id) ---
+INSERT INTO geraete_by_kurs (kurs_id, geraet_id, kurs_titel, geraet_bezeichnung, typ, anzahl) VALUES (1, 1, 'CrossFit Basics', 'Laufband',      'Cardio',   4);
+INSERT INTO geraete_by_kurs (kurs_id, geraet_id, kurs_titel, geraet_bezeichnung, typ, anzahl) VALUES (1, 3, 'CrossFit Basics', 'Kettlebell',    'Kraft',    10);
+INSERT INTO geraete_by_kurs (kurs_id, geraet_id, kurs_titel, geraet_bezeichnung, typ, anzahl) VALUES (2, 2, 'Spinning Power',  'Spinning Bike', 'Cardio',   10);
+INSERT INTO geraete_by_kurs (kurs_id, geraet_id, kurs_titel, geraet_bezeichnung, typ, anzahl) VALUES (3, 4, 'Yoga Flow',       'Yogamatte',     'Zubehoer', 15);

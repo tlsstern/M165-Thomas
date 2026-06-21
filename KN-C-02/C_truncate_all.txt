@@ -1,0 +1,10 @@
+// KN-C-02 Teil C: Aufraeum-Skript - loescht ALLE Daten (Tabellen-Struktur bleibt erhalten).
+// Danach kann A_insert_data.txt erneut ausgefuehrt werden, um neu zu befuellen.
+// Ausfuehren mit:  cqlsh 13.220.49.223 9042 -f C_truncate_all.txt
+
+USE sternfitness;
+
+TRUNCATE kursteilnehmer_by_kurs;
+TRUNCATE kurse_by_mitglied;
+TRUNCATE kurse_by_trainer;
+TRUNCATE geraete_by_kurs;
