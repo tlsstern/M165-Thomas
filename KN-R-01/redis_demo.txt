@@ -1,0 +1,17 @@
+PING
+SET cache:member:1 "Anna Stern" EX 60
+GET cache:member:1
+TTL cache:member:1
+HSET member:1 name "Anna Stern" status aktiv plan premium
+HGETALL member:1
+SET stat:visits 0
+INCR stat:visits
+INCR stat:visits
+GET stat:visits
+SADD kurs:1:teilnehmer 1 2 3
+SMEMBERS kurs:1:teilnehmer
+SCARD kurs:1:teilnehmer
+ZADD leaderboard 50 Anna 30 Ben 70 Cara
+ZREVRANGE leaderboard 0 -1 WITHSCORES
+KEYS *
+DBSIZE

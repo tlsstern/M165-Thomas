@@ -1,0 +1,12 @@
+{
+  "name": "kn-r-01-redis-driver",
+  "version": "1.0.0",
+  "description": "KN-R-01 Redis Node.js driver demo (SternFitness)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "redis": "^4.7.0"
+  }
+}
