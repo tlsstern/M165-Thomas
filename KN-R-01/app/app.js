@@ -5,8 +5,8 @@
 
 const { createClient } = require("redis");
 
-// Verbindungsdaten: 54.242.137.73 nach dem Launch der Instanz eintragen (siehe .gemini/details.md).
-const HOST = process.env.REDIS_HOST || "54.242.137.73";
+// Verbindungsdaten: 100.55.48.92 nach dem Launch der Instanz eintragen (siehe .gemini/details.md).
+const HOST = process.env.REDIS_HOST || "100.55.48.92";
 const PORT = 6379;
 const PASSWORD = "Thomas-Password";
 
@@ -18,12 +18,12 @@ async function main() {
   console.log("Erfolgreich mit Redis verbunden!\n");
 
   // 1) String + TTL: in-memory Cache fuer einen Mitglieds-Namen (laeuft nach 60s ab)
-  await client.set("cache:member:1", "Anna Stern", { EX: 60 });
+  await client.set("cache:member:1", "Thomas Stern", { EX: 60 });
   console.log("1) Cache GET cache:member:1 :", await client.get("cache:member:1"));
   console.log("   Verbleibende TTL (Sekunden):", await client.ttl("cache:member:1"), "\n");
 
   // 2) Hash: Mitglieds-Profil als Feld-Wert-Paare
-  await client.hSet("member:1", { name: "Anna Stern", status: "aktiv", plan: "premium" });
+  await client.hSet("member:1", { name: "Thomas Stern", status: "aktiv", plan: "premium" });
   console.log("2) HGETALL member:1 :", await client.hGetAll("member:1"), "\n");
 
   // 3) Counter: Anzahl Studio-Besuche atomar hochzaehlen
@@ -35,7 +35,7 @@ async function main() {
   // 4) Sorted Set: Leaderboard der aktivsten Mitglieder (Score = Trainings)
   await client.del("leaderboard");
   await client.zAdd("leaderboard", [
-    { score: 50, value: "Anna" },
+    { score: 50, value: "Thomas" },
     { score: 30, value: "Ben" },
     { score: 70, value: "Cara" },
   ]);
